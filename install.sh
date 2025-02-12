@@ -106,5 +106,19 @@ EOF
 echo -e "${WHITE}Запуск контейнера Chromium...${RESET}"
 docker-compose up -d
 
+# Перевірка стану контейнера
+echo -e "${CYAN}Перевірка стану контейнера Chromium...${RESET}"
+docker ps | grep chromium_browser > /dev/null
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}Контейнер працює нормально.${RESET}"
+    echo -e "${CYAN}Останні логи контейнера:${RESET}"
+    # Показати останні 10 рядків з логів контейнера
+    docker logs --tail 10 chromium_browser
+else
+    echo -e "${RED}Контейнер не запущено або є проблема з його запуском!${RESET}"
+    echo -e "${CYAN}Переглянути повні логи контейнера можна за допомогою команди:${RESET}"
+    echo -e "${MAGENTA}docker logs chromium_browser${RESET}"
+fi
+
 # Завершення
 echo -e "${GREEN}Встановлення завершено! Доступ до Chromium: http://<ip-адреса>:3050${RESET}"
