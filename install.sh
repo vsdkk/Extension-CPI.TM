@@ -43,21 +43,40 @@ if ! command -v docker &> /dev/null; then
     docker --version
     echo -e "${GREEN}Docker успішно встановлено!${RESET}"
 else
-    echo -e "${GREEN}Docker вже встановлений.${RESET}"
+    echo -e "${GREEN}Docker вже встановлений. Хочете оновити Docker? (yes/no): ${RESET}"
+    read update_docker
+    if [[ "$update_docker" == "yes" ]]; then
+        echo -e "${YELLOW}Оновлюю Docker...${RESET}"
+        sudo apt-get update
+        sudo apt-get install --only-upgrade docker-ce docker-ce-cli containerd.io
+        docker --version
+        echo -e "${GREEN}Docker успішно оновлено!${RESET}"
+    else
+        echo -e "${GREEN}Пропуск оновлення Docker.${RESET}"
+    fi
 fi
 
-# Запит на встановлення Docker Compose
-echo -e "${YELLOW}Встановити Docker Compose? (введіть yes або no): ${RESET}"
-read install_compose
-if [[ "$install_compose" == "yes" ]]; then
-    echo -e "${WHITE}Встановлення Docker Compose...${RESET}"
+# Перевірка наявності Docker Compose
+if ! command -v docker-compose &> /dev/null; then
+    echo -e "${YELLOW}Docker Compose не знайдений. Встановлюю Docker Compose...${RESET}"
     VER=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)
     curl -L "https://github.com/docker/compose/releases/download/$VER/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
     docker-compose --version
     echo -e "${GREEN}Docker Compose успішно встановлено!${RESET}"
 else
-    echo -e "${YELLOW}Пропуск встановлення Docker Compose.${RESET}"
+    echo -e "${GREEN}Docker Compose вже встановлений. Хочете оновити Docker Compose? (yes/no): ${RESET}"
+    read update_compose
+    if [[ "$update_compose" == "yes" ]]; then
+        echo -e "${YELLOW}Оновлюю Docker Compose...${RESET}"
+        VER=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep tag_name | cut -d '"' -f 4)
+        curl -L "https://github.com/docker/compose/releases/download/$VER/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        docker-compose --version
+        echo -e "${GREEN}Docker Compose успішно оновлено!${RESET}"
+    else
+        echo -e "${GREEN}Пропуск оновлення Docker Compose.${RESET}"
+    fi
 fi
 
 # Запит облікових даних
@@ -122,3 +141,4 @@ fi
 
 # Завершення
 echo -e "${GREEN}Встановлення завершено! Доступ до Chromium: http://<ip-адреса>:3050${RESET}"
+
