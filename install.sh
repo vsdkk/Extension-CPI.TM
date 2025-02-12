@@ -24,19 +24,6 @@ echo -e "${WHITE}====================================================${RESET}"
 echo -e "${CYAN}   Офіційний скрипт налаштування CPI.TM${RESET}"
 echo -e "${WHITE}====================================================${RESET}\n"
 
-# Якщо передано параметр --remove, виконуємо видалення
-if [ "$1" == "--remove" ]; then
-  echo -e "${YELLOW}Видалення контейнера та скрипта...${RESET}"
-
-  # Зупинити і видалити контейнер
-  docker stop $(docker ps -q --filter "name=chromium_browser") && \
-  docker rm $(docker ps -q --filter "name=chromium_browser") && \
-  rm -f install.sh && \
-  echo -e "${GREEN}Контейнер і скрипт успішно видалено.${RESET}" || \
-  echo -e "${RED}Не вдалося видалити контейнер або скрипт.${RESET}"
-  exit 0
-fi
-
 # Оновлення системи
 echo -e "${BLUE}Оновлення системи...${RESET}"
 sudo apt-get update && sudo apt-get upgrade -y
