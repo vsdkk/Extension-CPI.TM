@@ -15,5 +15,7 @@
 ## Ліцензія
 
 Цей скрипт був створений спеціально для команди **CPI.TM**. Усі права належать команді **CPI.TM**.
+
 This script was created specifically for the CPI.TM team. All rights are reserved by the CPI.TM team.
+
 ---
